@@ -3,24 +3,14 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://KKKKKJin.github.io/blog/</loc>
-  </url><url>
-    <loc>https://KKKKKJin.github.io/categories/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://KKKKKJin.github.io/zh/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://KKKKKJin.github.io/categories/"
-                />
+    <lastmod>2024-05-08T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://KKKKKJin.github.io/</loc>
+    <lastmod>2024-05-08T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
-                hreflang="zh"
-                href="https://KKKKKJin.github.io/zh/"
+                hreflang="zh-cn"
+                href="https://KKKKKJin.github.io/zh-cn/"
                 />
     <xhtml:link
                 rel="alternate"
@@ -29,15 +19,34 @@
                 />
   </url><url>
     <loc>https://KKKKKJin.github.io/tags/</loc>
+    <lastmod>2024-05-08T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
-                hreflang="zh"
-                href="https://KKKKKJin.github.io/zh/tags/"
+                hreflang="zh-cn"
+                href="https://KKKKKJin.github.io/zh-cn/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
                 href="https://KKKKKJin.github.io/tags/"
+                />
+  </url><url>
+    <loc>https://KKKKKJin.github.io/tags/tech/</loc>
+    <lastmod>2024-05-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://KKKKKJin.github.io/blog/osg/</loc>
+    <lastmod>2024-05-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://KKKKKJin.github.io/categories/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://KKKKKJin.github.io/zh-cn/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://KKKKKJin.github.io/categories/"
                 />
   </url>
 </urlset>
