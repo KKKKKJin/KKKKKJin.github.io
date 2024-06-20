@@ -101,8 +101,8 @@
   "keywords": [
     "Tech"
   ],
-  "articleBody": "TBD\n",
-  "wordCount" : "1",
+  "articleBody": "This article is indicated to describe the whole process of performing jobs on OSG. More specifically, it takes running a Python project with PyTorch environment in Mac OS system as an example. In short, we will introduce:\nHow to sign-up and access OSG How to set up the necessary environment on OSG How to prepare, submit, run and monitor jobs on OSG How to collect results from OSG to local Due to the specific design of OSG, it is pretty powerful to run tasks which can be performed parallelly. For example, in the area of statistics, people usually need to do some kind of simulations to advocate their methods. However, due to the randomness, the simulation procedure usually need to be repeated many times. In this case, OSG can render much convenience since it can handle hundreds simulation replications meanwhile. Moreover, for each replication, we can further run it parallelly with multiple CPUs.\nThanks to Weiwei for his shared commands and the initial introduction of OSG to me.\nSome codes in this article are written with the help from ChatGPT. Thanks!\nIntroduction of the Open Science Grid platform The Open Science Grid (OSG) consists of unused computing and storage resources at universities and national labs spanning the United States. Participators can submit their tasks to OSG through the Open Science Pool. However, each jobs should fit on a single server; see Page to learn the appropriate size of job for running smoothly on OSG.\nSign up for OSG account If you are a researcher affiliated with a US Academic Institution, just go to Link to sign up for the usage of OSG. In short, you need to fulfill the reason of applying the OSG usage and then someone from the OSG team will set up a meeting with you to give more detailed introduction about OSG and create an account for you.\nAccess to OSG from local Once you have met with OSG team member, you will have an account set up to access OSG. There are two steps to make the connection between your local computer and the OSG:\nCreate a SSH key; see Page for the simple way to create a SSH key. If the folder name which stores the SSH key is ssh. You can run the code follows in terminal to open the ssh folder: cd ~/. ssh Then, a simple command below can list all SSH keys stored in your local computer.\nls To get a specific SSH key info, use the below code but replace the name with the actual file name.\ncat name.pub Lastly, we need to add a this SSH key info to our web profile in OSG Page; see more details about this process from Page.\nAdd the two-factor authentication; see Page for more details. (I used the Google Authenticator to be the second authentication) Finally, we are ready to access OSG from local. Type the below code in terminal, but replace with your own Unix Username read from Profile on Page. Also, please replace with the true login node assigned to you:\nssh Unix Username@login node Then, you need to enter the passphrase which you defined when the SSH key is created. Also, you need to pass the second authentication.\nSet up the environment Once we are able to access OSG, the next step is to run our jobs. Since the OSG provides the computation resources collected from different places, we need to specify the environment in which our jobs will run upon. For example, we shall indicate which packages we require. There are some existing environment provided by OSG using containers; see Page. Unfortunately, these basic environments may not satisfy our need. Thus, we need to set up our own environment.\nIn this article, we introduce the method to create the desired environment through compiling an image based on a docker file. First, please install the Docker from Page. Then, we can check the if the installation is successful by running below code in terminal\ndocker --version Then, we need to write a docker file (.txt file) to state which packages we need. A docker file template looks like below:\n# Use an official Python runtime as a parent image FROM --platform=linux/amd64 python:3.8-slim # Set environment variables ENV PYTHONDONTWRITEBYTECODE=1 \\ PYTHONUNBUFFERED=1 \\ PIP_NO_CACHE_DIR=off \\ PIP_DISABLE_PIP_VERSION_CHECK=on \\ PIP_DEFAULT_TIMEOUT=100 # Install system dependencies RUN apt-get update \\ \u0026\u0026 apt-get install -y --no-install-recommends \\ git \\ build-essential \\ libglib2.0-0 \\ libsm6 \\ libxext6 \\ libxrender-dev \\ wget \\ \u0026\u0026 rm -rf /var/lib/apt/lists/* # Install PyTorch and other packages RUN python3 -m pip install torch joblib pandas scikit-learn numpy # Set the working directory in the container WORKDIR /app # Copy the current directory contents into the container at /app COPY . /app First line FROM --platform=linux/amd64 python:3.8-slim is important which indicates that we require an environment built in amd64 structure. (Mac will adopt another structure without this line due to the ARM-based M chip)\nThe line RUN python3 -m pip install torch joblib pandas sklearn gives a list of needed packages. Here, joblib is a package used to run code parallelly with multiple CPUs. You can add additional necessary packages following the list.\nHow to check the built-in libraries in Python will be explained later.\nSubsequently, we can build the container image which will be provided as the environment later by the command below. (note you need to be in the folder which contains the docker file; use the command cd)\ndocker build -t namespace/repository_name . For the namespace, you can use your own Docker account name. For repository_name, you can give any distinguishable name. For this moment, I am creating an environment for CalibrationPI project, so I will use command, e.g., docker build -t user/calibrationpi .. You can replace user with your own user name.\nAfter the building, you should be able to see the Image ID by the command below:\ndocker image list Then, we need to transfer the Docker image to the OSG. First, let’s compress this image to a .tar file by the command below:\ndocker save Image ID -o file name.tar Replace Image ID with the image ID you found with docker image list. You can specify any file name.\nSince the image file is usually larger than 1 GB, we need to transfer it to Open Science Data Federation (OSDF); the location of OSDF for different login node can be found on this Page. For example, my login node is ap21 and my unix username is user. Thus, the location in which we should transfer image to is /ospool/ap21/data/user. We can accomplish the transfer by the code below:\nscp calibrationpi.tar user@ap21.uc.osg-htc.org:/ospool/ap21/data/user Remember to replace user in above command with your own unix username and use your login node.\nThen, we need login the OSG and go the location /ospool/ap21/data/user where we put the docker image in. Use the below command, we can convert the docker image to SIF image:\napptainer build file name.sif docker-archive://file name.tar Here, file name.tar is the .tar file compressed before. After building SIF image, you can see .sif file in this folder by ls command. This .sig file will be specified when we write the submit file on OSG.\nLast step, we shall check if the packages have been installed successfully. Open the file name.sif by command:\napptainer shell pytorch-2.1.1.sif Then, open python by command:\npython Check if torch was installed successfully by command:\nimport torch After check, use exit() to exit python and exit to exit image.\nPrepare, submit, run and monitor jobs on OSG In this part, we apply a simple simulation task to illustrate how shall we prepare and run jobs on OSG. Let’s say we want to simulate 100 samples from a distribution\n$L_2$\n",
+  "wordCount" : "1290",
   "inLanguage": "en",
   "datePublished": "2023-06-15T00:00:00Z",
   "dateModified": "2024-05-08T00:00:00Z",
@@ -193,8 +193,129 @@
     <div class="post-meta"><span title='2023-06-15 00:00:00 +0000 UTC'>June 15, 2023</span>&nbsp;·&nbsp;Kejin Wu
 
 </div>
-  </header> 
-  <div class="post-content"><p>TBD</p>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction-of-the-open-science-grid-platform">Introduction of the Open Science Grid platform</a></li>
+    <li><a href="#sign-up-for-osg-account">Sign up for OSG account</a></li>
+    <li><a href="#access-to-osg-from-local">Access to OSG from local</a></li>
+    <li><a href="#set-up-the-environment">Set up the environment</a></li>
+    <li><a href="#prepare-submit-run-and-monitor-jobs-on-osg">Prepare, submit, run and monitor jobs on OSG</a></li>
+  </ul>
+</nav>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>This article is indicated to describe the whole process of performing jobs on OSG. More specifically, it takes running a Python project with PyTorch environment in Mac OS system as an example. In short, we will introduce:</p>
+<ul>
+<li>How to sign-up and access OSG</li>
+<li>How to set up the necessary environment on OSG</li>
+<li>How to prepare, submit, run and monitor jobs on OSG</li>
+<li>How to collect results from OSG to local</li>
+</ul>
+<p>Due to the specific design of OSG, it is pretty powerful to run tasks which can be performed parallelly. For example, in the area of statistics, people usually need to do some kind of simulations to advocate their methods. However, due to the randomness, the simulation procedure usually need to be repeated many times. In this case, OSG can render much convenience since it can handle hundreds simulation replications meanwhile. Moreover, for each replication, we can further run it parallelly with multiple CPUs.</p>
+<hr>
+<blockquote>
+<p><em>Thanks to Weiwei for his shared commands and the initial introduction of OSG to me.</em></p>
+</blockquote>
+<blockquote>
+<p><em>Some codes in this article are written with the help from ChatGPT. Thanks!</em></p>
+</blockquote>
+<hr>
+<h2 id="introduction-of-the-open-science-grid-platform">Introduction of the Open Science Grid platform<a hidden class="anchor" aria-hidden="true" href="#introduction-of-the-open-science-grid-platform">#</a></h2>
+<p>The Open Science Grid (OSG) consists of unused computing and storage resources at universities and national labs spanning the United States. Participators can submit their tasks to OSG through the Open Science Pool. However, each jobs should fit on a single server; see <a href="https://osg-htc.org/services/open_science_pool.html">Page</a> to learn the appropriate size of job for running smoothly on OSG.</p>
+<h2 id="sign-up-for-osg-account">Sign up for OSG account<a hidden class="anchor" aria-hidden="true" href="#sign-up-for-osg-account">#</a></h2>
+<p>If you are a researcher affiliated with a US Academic Institution, just go to <a href="https://portal.osg-htc.org/application">Link</a> to sign up for the usage of OSG. In short, you need to fulfill the reason of applying the OSG usage and then someone from the OSG team will set up a meeting with you to give more detailed introduction about OSG and create an account for you.</p>
+<h2 id="access-to-osg-from-local">Access to OSG from local<a hidden class="anchor" aria-hidden="true" href="#access-to-osg-from-local">#</a></h2>
+<p>Once you have met with OSG team member, you will have an account set up to access OSG. There are two steps to make the connection between your local computer and the OSG:</p>
+<ol>
+<li>Create a SSH key; see <a href="https://portal.osg-htc.org/documentation/overview/account_setup/generate-add-sshkey/">Page</a> for the simple way to create a SSH key. If the folder name which stores the SSH key is <strong>ssh</strong>.
+You can run the code follows in terminal to open the <strong>ssh</strong> folder:</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/. ssh
+</span></span></code></pre></div><p>Then, a simple command below can list all SSH keys stored in your local computer.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ls
+</span></span></code></pre></div><p>To get a specific SSH key info, use the below code but replace the <code>name</code> with the actual file name.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat name.pub
+</span></span></code></pre></div><p>Lastly, we need to add a this SSH key info to our web profile in OSG <a href="https://www.osgconnect.net/">Page</a>; see more details about this process from <a href="https://portal.osg-htc.org/documentation/overview/account_setup/connect-access/">Page</a>.</p>
+<ol start="2">
+<li>Add the two-factor authentication; see <a href="https://portal.osg-htc.org/documentation/overview/account_setup/connect-access/">Page</a> for more details. (I used the Google Authenticator to be the second authentication)</li>
+</ol>
+<p>Finally, we are ready to access OSG from local. Type the below code in terminal, but replace <code>&lt;Unix Username&gt;</code> with your own Unix Username read from Profile on <a href="https://www.osgconnect.net/">Page</a>. Also, please replace <code>&lt;login node&gt;</code> with the true login node assigned to you:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh Unix Username@login node
+</span></span></code></pre></div><p>Then, you need to enter the passphrase which you defined when the SSH key is created. Also, you need to pass the second authentication.</p>
+<h2 id="set-up-the-environment">Set up the environment<a hidden class="anchor" aria-hidden="true" href="#set-up-the-environment">#</a></h2>
+<p>Once we are able to access OSG, the next step is to run our jobs. Since the OSG provides the computation resources collected from different places, we need to specify the environment in which our jobs will run upon. For example, we shall indicate which packages we require. There are some existing environment provided by OSG using containers; see <a href="https://portal.osg-htc.org/documentation/htc_workloads/using_software/available-containers-list/">Page</a>. Unfortunately, these basic environments may not satisfy our need. Thus, we need to set up our own environment.</p>
+<p>In this article, we introduce the method to create the desired environment through compiling an image based on a docker file. First, please install the <strong>Docker</strong> from <a href="https://www.docker.com/">Page</a>. Then, we can check the if the installation is successful by running below code in terminal</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker --version
+</span></span></code></pre></div><p>Then, we need to write a docker file (<strong>.txt file</strong>) to state which packages we need. A docker file template looks like below:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Use an official Python runtime as a parent image</span>
+</span></span><span class="line"><span class="cl">FROM --platform<span class="o">=</span>linux/amd64 python:3.8-slim
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Set environment variables</span>
+</span></span><span class="line"><span class="cl">ENV <span class="nv">PYTHONDONTWRITEBYTECODE</span><span class="o">=</span><span class="m">1</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="nv">PYTHONUNBUFFERED</span><span class="o">=</span><span class="m">1</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="nv">PIP_NO_CACHE_DIR</span><span class="o">=</span>off <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="nv">PIP_DISABLE_PIP_VERSION_CHECK</span><span class="o">=</span>on <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="nv">PIP_DEFAULT_TIMEOUT</span><span class="o">=</span><span class="m">100</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Install system dependencies</span>
+</span></span><span class="line"><span class="cl">RUN apt-get update <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="o">&amp;&amp;</span> apt-get install -y --no-install-recommends <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        git <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        build-essential <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        libglib2.0-0 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        libsm6 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        libxext6 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        libxrender-dev <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>        wget <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="o">&amp;&amp;</span> rm -rf /var/lib/apt/lists/*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Install PyTorch and other packages</span>
+</span></span><span class="line"><span class="cl">RUN python3 -m pip install torch joblib pandas scikit-learn numpy
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Set the working directory in the container</span>
+</span></span><span class="line"><span class="cl">WORKDIR /app
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Copy the current directory contents into the container at /app</span>
+</span></span><span class="line"><span class="cl">COPY . /app
+</span></span></code></pre></div><p>First line <code>FROM --platform=linux/amd64 python:3.8-slim</code> is important which indicates that we require an environment built in <code>amd64</code> structure. (Mac will adopt another structure without this line due to the ARM-based M chip)</p>
+<p>The line <code>RUN python3 -m pip install torch joblib pandas sklearn</code> gives a list of needed packages. Here, <code>joblib</code> is a package used to run code parallelly with multiple CPUs. You can add additional necessary packages following the list.</p>
+<p>How to check the built-in libraries in Python will be explained later.</p>
+<p>Subsequently, we can build the container image which will be provided as the environment later by the command below. (note you need to be in the folder which contains the docker file; use the command <code>cd</code>)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker build -t namespace/repository_name .
+</span></span></code></pre></div><p>For the <code>namespace</code>, you can use your own <strong>Docker</strong> account name. For <code>repository_name</code>, you can give any distinguishable name. For this moment, I am creating an environment for CalibrationPI project, so I will use command, e.g., <code>docker build -t user/calibrationpi .</code>. You can replace <code>user</code> with your own user name.</p>
+<p>After the building, you should be able to see the Image ID by the command below:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker image list
+</span></span></code></pre></div><p>Then, we need to transfer the Docker image to the OSG. First, let&rsquo;s compress this image to a <code>.tar</code> file by the command below:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker save Image ID -o file name.tar
+</span></span></code></pre></div><p>Replace <code>Image ID</code> with the image ID you found with <code>docker image list</code>. You can specify any <code>file name</code>.</p>
+<p>Since the image file is usually larger than 1 GB, we need to transfer it to Open Science Data Federation (OSDF); the location of OSDF for different login node can be found on this <a href="https://portal.osg-htc.org/documentation/htc_workloads/managing_data/osdf/">Page</a>. For example, my login node is <code>ap21</code> and my unix username is <code>user</code>. Thus, the location in which we should transfer image to is <code>/ospool/ap21/data/user</code>. We can accomplish the transfer by the code below:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">scp calibrationpi.tar user@ap21.uc.osg-htc.org:/ospool/ap21/data/user
+</span></span></code></pre></div><p>Remember to replace <code>user</code> in above command with your own unix username and use your login node.</p>
+<p>Then, we need login the OSG and go the location <code>/ospool/ap21/data/user</code> where we put the docker image in. Use the below command, we can convert the docker image to SIF image:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apptainer build file name.sif docker-archive://file name.tar
+</span></span></code></pre></div><p>Here, <code>file name.tar</code> is the <code>.tar</code> file compressed before. After building SIF image,  you can see <code>.sif</code> file in this folder by <code>ls</code> command. This <code>.sig</code> file will be specified when we write the submit file on OSG.</p>
+<p>Last step, we shall check if the packages have been installed successfully. Open the <code>file name.sif</code> by command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apptainer shell pytorch-2.1.1.sif
+</span></span></code></pre></div><p>Then, open python by command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python
+</span></span></code></pre></div><p>Check if <code>torch</code> was installed successfully by command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">import torch
+</span></span></code></pre></div><p>After check, use <code>exit()</code> to exit python and <code>exit</code> to exit image.</p>
+<h2 id="prepare-submit-run-and-monitor-jobs-on-osg">Prepare, submit, run and monitor jobs on OSG<a hidden class="anchor" aria-hidden="true" href="#prepare-submit-run-and-monitor-jobs-on-osg">#</a></h2>
+<blockquote>
+<p>In this part, we apply a simple simulation task to illustrate how shall we prepare and run jobs on OSG.
+Let&rsquo;s say we want to simulate 100 samples from a  distribution</p>
+</blockquote>
+<p>$L_2$</p>
 
 
   </div>
