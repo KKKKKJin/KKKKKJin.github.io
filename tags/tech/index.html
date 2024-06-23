@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto">
 
-<head><meta name="google-site-verification" content="CZ8mgXA66moeAJ_qKYHPOC_cBCf2VaFdUZp2Xu7muyQ" />
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/contrib/auto-render.min.css">
+<meta name="google-site-verification" content="CZ8mgXA66moeAJ_qKYHPOC_cBCf2VaFdUZp2Xu7muyQ" />
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -86,10 +89,10 @@
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://KKKKKJin.github.io/" accesskey="h" title="Kejin Wu&#39;s Blog (Alt + H)">
+            <a href="https://KKKKKJin.github.io/" accesskey="h" title="Kejin&#39;s Blog (Alt + H)">
                 <img src="https://KKKKKJin.github.io/favicon.ico" alt="" aria-label="logo"
                     height="18"
-                    width="18">Kejin Wu&#39;s Blog</a>
+                    width="18">Kejin&#39;s Blog</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -113,7 +116,7 @@
                 </button>
                 <ul class="lang-switch"><li>|</li>
                     <li>
-                        <a href="https://KKKKKJin.github.io/zh-cn/" title="Chinese"
+                        <a href="https://KKKKKJin.github.io/zh/" title="Chinese"
                             aria-label="中文">中文</a>
                     </li>
                 </ul>
@@ -141,9 +144,9 @@
     </h2>
   </header>
   <div class="entry-content">
-    <p>The approach to run a project with PyTorch on OSG platform</p>
+    <p>An approach to run projects with PyTorch on OSG platform</p>
   </div>
-  <footer class="entry-footer"><span title='2023-06-15 00:00:00 +0000 UTC'>June 15, 2023</span>&nbsp;·&nbsp;Kejin Wu</footer>
+  <footer class="entry-footer"><span title='2024-06-22 00:00:00 +0000 UTC'>June 22, 2024</span>&nbsp;·&nbsp;Kejin Wu</footer>
   <a class="entry-link" aria-label="post link to The basic usage of OSG" href="https://KKKKKJin.github.io/blog/osg/"></a>
 </article>
     </main>
@@ -208,6 +211,22 @@
     })
 
 </script>
+
+
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false}
+      ]
+    });
+  });
+</script>
+
 </body>
 
 </html>

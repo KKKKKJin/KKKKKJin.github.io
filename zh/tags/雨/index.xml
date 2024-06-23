@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>雨 on 一个小世界</title>
-    <link>http://localhost:1313/zh/tags/%E9%9B%A8/</link>
+    <link>https://KKKKKJin.github.io/zh/tags/%E9%9B%A8/</link>
     <description>Recent content in 雨 on 一个小世界</description>
     <generator>Hugo -- 0.126.1</generator>
     <language>zh</language>
     <lastBuildDate>Wed, 08 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/zh/tags/%E9%9B%A8/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://KKKKKJin.github.io/zh/tags/%E9%9B%A8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>最后一次作为 Associate Instructor </title>
-      <link>http://localhost:1313/zh/diary/indexadvance/</link>
-      <pubDate>Thu, 08 Jun 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/zh/diary/indexadvance/</guid>
-      <description>.</description>
+      <link>https://KKKKKJin.github.io/zh/diary/lastassociateinstructor/</link>
+      <pubDate>Sat, 08 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>https://KKKKKJin.github.io/zh/diary/lastassociateinstructor/</guid>
+      <description>及恭喜Yanyi Defense 成功</description>
     </item>
   </channel>
 </rss>
