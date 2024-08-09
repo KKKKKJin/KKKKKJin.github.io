@@ -211,21 +211,11 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    try {
-      
-      const player = new Plyr('#player', {
+        player = new Plyr('#player', {
         controls: ['play', 'pause', 'progress', 'current-time', 'mute', 'volume'],
-        autoplay: false,
-        loop: false 
+        autoplay: false
       });
 
-      
-      console.log('Plyr player initialized:', player);
-    } catch (error) {
-      console.error('Error initializing Plyr:', error);
-    }
-  });
 </script>
 
 <style>
