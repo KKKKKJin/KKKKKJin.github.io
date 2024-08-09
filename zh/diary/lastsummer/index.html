@@ -2,6 +2,9 @@
 <html lang="zh" dir="auto">
 
 <head>
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/contrib/auto-render.min.css">
 <meta name="google-site-verification" content="CZ8mgXA66moeAJ_qKYHPOC_cBCf2VaFdUZp2Xu7muyQ" />
@@ -121,8 +124,8 @@
   "keywords": [
     "雨"
   ],
-  "articleBody": " 回到过去 Your browser does not support the audio element.\n",
-  "wordCount" : "9",
+  "articleBody": " Your browser does not support the audio element. Song Title Artist Name\n",
+  "wordCount" : "12",
   "inLanguage": "zh",
   "datePublished": "2024-08-09T00:00:00Z",
   "dateModified": "2024-08-09T00:00:00Z",
@@ -195,17 +198,72 @@
 
 </div>
   </header> 
-  <div class="post-content"><div id="custom-audio-player">
-    <span id="song-name">回到过去</span>
+  <div class="post-content"><div class="plyr__audio-embed transparent-background">
+  <audio id="player" controls>
+    <source src="/music/cd.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="music-info">
+    <h3 class="music-title">Song Title</h3>
+    <p class="music-artist">Artist Name</p>
+    
+  </div>
 </div>
-<audio id="music-player" controls>
-    <source type="audio/mp3" src="/music/cd.mp3"></source>
-    <p>Your browser does not support the audio element.</p>
-</audio>
+
 <script>
-    var player = document.getElementById("music-player");
-    player.volume = 0.2;
+  document.addEventListener('DOMContentLoaded', () => {
+    try {
+      
+      const player = new Plyr('#player', {
+        controls: ['play', 'pause', 'progress', 'current-time', 'mute', 'volume'],
+        autoplay: false,
+        loop: false 
+      });
+
+      
+      console.log('Plyr player initialized:', player);
+    } catch (error) {
+      console.error('Error initializing Plyr:', error);
+    }
+  });
 </script>
+
+<style>
+  .transparent-background {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .plyr__audio-embed,
+  .plyr__controls {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .plyr__control {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .music-info {
+    margin-top: -20px;
+    text-align: left;
+  }
+
+  .music-title {
+    font-size: 1em;
+    font-weight: left;
+  }
+
+  .music-artist, .music-album {
+    margin-top: -20px;
+    font-size: 0.8em;
+    color: #605e5e;
+  }
+</style>
+
 
 
   </div>
