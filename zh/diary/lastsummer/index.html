@@ -124,8 +124,8 @@
   "keywords": [
     "雨"
   ],
-  "articleBody": " Your browser does not support the audio element. Song Title Artist Name\n",
-  "wordCount" : "12",
+  "articleBody": " Your browser does not support the audio element. 回到过去 Jay chou\n",
+  "wordCount" : "11",
   "inLanguage": "zh",
   "datePublished": "2024-08-09T00:00:00Z",
   "dateModified": "2024-08-09T00:00:00Z",
@@ -198,62 +198,71 @@
 
 </div>
   </header> 
-  <div class="post-content"><div class="plyr__audio-embed transparent-background">
+  <div class="post-content"><div class="plyr__audio-embed">
   <audio id="player" controls>
     <source src="/music/cd.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
   <div class="music-info">
-    <h3 class="music-title">Song Title</h3>
-    <p class="music-artist">Artist Name</p>
+    <h3 class="music-title">回到过去</h3>
+    <p class="music-artist">Jay chou</p>
     
   </div>
 </div>
 
 <script>
-        player = new Plyr('#player', {
+  document.addEventListener('DOMContentLoaded', () => {
+    try {
+      
+      const player = new Plyr('#player', {
         controls: ['play', 'pause', 'progress', 'current-time', 'mute', 'volume'],
         autoplay: false
       });
 
+      
+      console.log('Plyr player initialized:', player);
+    } catch (error) {
+      console.error('Error initializing Plyr:', error);
+    }
+  });
 </script>
 
+
 <style>
-  .transparent-background {
-    background: transparent !important;
-    border: none !important;
-  }
-
-  .plyr__audio-embed,
-  .plyr__controls {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  .plyr__control {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
   .music-info {
     margin-top: -20px;
     text-align: left;
   }
 
   .music-title {
-    font-size: 1em;
+    font-size: 1.1em !important;
     font-weight: left;
   }
 
-  .music-artist, .music-album {
-    margin-top: -20px;
+  .music-artist {
     font-size: 0.8em;
+    margin-top: -20px;
     color: #605e5e;
   }
+
 </style>
 
+
+
+<style>
+.plyr__controls {
+  background: transparent !important;
+}
+
+.plyr__progress--played {
+  background: transparent !important;
+}
+
+.plyr__control {
+  background: transparent !important;
+  color: #fff;  
+}
+</style>
 
 
   </div>
