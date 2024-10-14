@@ -13,14 +13,14 @@
       <link>https://KKKKKJin.github.io/blog/academictemplate/</link>
       <pubDate>Thu, 04 Jul 2024 00:00:00 +0000</pubDate>
       <guid>https://KKKKKJin.github.io/blog/academictemplate/</guid>
-      <description>based on Latex beamer class</description>
+      <description>A Latex beamer class</description>
     </item>
     <item>
       <title>The basic usage of OSG</title>
       <link>https://KKKKKJin.github.io/blog/osg/</link>
       <pubDate>Sat, 22 Jun 2024 00:00:00 +0000</pubDate>
       <guid>https://KKKKKJin.github.io/blog/osg/</guid>
-      <description>an approach to run projects with PyTorch on OSG platform</description>
+      <description>An approach to run projects with PyTorch on OSG platform</description>
     </item>
   </channel>
 </rss>
